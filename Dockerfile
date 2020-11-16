@@ -10,7 +10,7 @@ LABEL name="Solution-Soft/Time Machine Sidecar for Kubernetes" \
       maintainer="kzhao@solution-soft.com"
 
 COPY help.1 /
-COPY licenses /
+COPY /licenses /
 
 ARG TINI_VERSION=v0.19.0
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
