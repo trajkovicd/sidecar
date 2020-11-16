@@ -36,4 +36,6 @@ HEALTHCHECK \
     --interval=5m \ 
     CMD ping -c 1 localhost || exit 1
 
+EXPOSE 7800
+
 ENTRYPOINT ["/tini", "--", "/entrypoint.sh"]
