@@ -1,21 +1,32 @@
-FROM centos:7
+FROM registry.access.redhat.com/ubi7/ubi:latest
 
-ENV TINI_VERSION v0.19.0
+LABEL name="Solution-Soft/Time Machine Sidecar for Kubernetes" \
+      vendor="SolutionSoft Systems, Inc" \
+      version="1.1" \
+      release="1" \
+      summary="Time Machine Sidecar for Kubernetes Image" \
+      description="Time Machine creates virtual clocks for time shift testing of Applications" \
+      url="https://solution-soft.com" \
+      maintainer="kzhao@solution-soft.com"
 
+COPY help.1 /
+COPY licenses /
+
+ARG TINI_VERSION=v0.19.0
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
-RUN chown root:root /tini && chmod +x /tini
-
-ADD https://busybox.net/downloads/binaries/1.31.0-defconfig-multiarch-musl/busybox-i686 /busybox
-RUN chown root:root /busybox && chmod +x /busybox
 
 COPY dist /dist
 COPY entrypoint.sh /
-RUN chown -R root:root /dist \
-&&  chown root:root /entrypoint.sh && chmod +x /entrypoint.sh
 
-USER root
+RUN chown root:root /tini && chmod +x /tini \
+&&  chown root:root /entrypoint.sh && chmod +x /entrypoint.sh \
+&&  chown -R root:root /dist \
+&&  yum --disableplugin=subscription-manager -y install sudo \
+&&  yum --disableplugin=subscription-manager clean all \
+&&  useradd -g 0 default \
+&&  echo "default	 ALL=(ALL:ALL) NOPASSWD:ALL" > /etc/sudoers.d/99-default-user
 
-# VOLUME /opt/ssstm
+USER default
 
 STOPSIGNAL SIGTERM
 
