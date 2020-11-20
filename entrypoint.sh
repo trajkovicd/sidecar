@@ -7,7 +7,7 @@ function populate() {
     WORKD=${1:-/opt/ssstm}
     DIST="/dist"
 
-    sudo mkdir -p $WORKD && sudo rm -rf $WORKD/* && sudo chown `id -u`:`id -g` $WORKD
+    sudo mkdir -p $WORKD && sudo rm -rf $WORKD/* && sudo chown `id -u`:`id -g` $WORKD && sudo chmod a+rx $WORKD
 
     # populate rhat lib structure
     mkdir -p $WORKD/lib $WORKD/lib64
